@@ -1548,7 +1548,7 @@ jQuery.fn.drawr.register({
 	pressure_affects_alpha: false,
 	pressure_affects_size: false,
 	activate: function(brush,context){
-		
+
 	},
 	deactivate: function(brush,context){
 		if(typeof brush.$floatyBox!=="undefined"){
@@ -1565,24 +1565,29 @@ jQuery.fn.drawr.register({
 		context.globalAlpha=alpha
 		if(typeof brush.$floatyBox=="undefined"){
 			var fontSizeForDisplay= parseInt(20 * self.zoomFactor);
-			brush.$floatyBox = $('<div style="z-index:6;position:absolute;width:100px;height:20px;"><input style="background:transparent;border:0px;padding:0px;font-size:' + fontSizeForDisplay + 'px;font-family:sans-serif;" type="text" value=""><button class="ok"><i class="mdi mdi-check"></i></button><button class="cancel"><i class="mdi mdi-close"></i></button></div>');
+			brush.$floatyBox = $('<div style="z-index:6;position:absolute;width:100px;height:20px;"><textarea style="background:transparent;border:0px;padding:0px;font-size:' + fontSizeForDisplay + 'px;font-family:sans-serif;" type="text" value=""></textarea><button class="ok"><i class="mdi mdi-check"></i></button><button class="cancel"><i class="mdi mdi-close"></i></button></div>');
 			$(brush.$floatyBox).insertAfter($(this).parent());
 			brush.$floatyBox.css({
 				left: $(this).parent().offset().left + (x*self.zoomFactor) - this.scrollX,
 				top: $(this).parent().offset().top + (y*self.zoomFactor) - this.scrollY,
 			});
-			brush.$floatyBox.find("input").on("mousedown touchstart",function(e){
+			brush.$floatyBox.find("textarea").on("mousedown touchstart",function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				brush.$floatyBox.find("input").focus();
+				brush.$floatyBox.find("textarea").focus();
 			});
-			brush.$floatyBox.find("input").focus();
+			brush.$floatyBox.find("textarea").focus();
 			event.preventDefault();
 			event.stopPropagation();
 			brush.$floatyBox.find(".ok").on("mousedown touchstart",function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				brush.applyText.call(self,context,brush,brush.currentPosition.x,brush.currentPosition.y,brush.$floatyBox.find("input").val());
+				var texts = brush.$floatyBox.find("textarea").val().split("\n");
+				var posY = brush.currentPosition.y;
+				for (var i = 0; i < texts.length; i++) {
+				        brush.applyText.call(self,context,brush,brush.currentPosition.x,posY,texts[i]);
+					posY += 22;
+				}
 				brush.$floatyBox.remove();
 				delete brush.$floatyBox;
 			});
@@ -1601,7 +1606,7 @@ jQuery.fn.drawr.register({
 	},
 	applyText: function(context,brush,x,y,text){
 		context.font = "20px sans-serif";
-		context.textAlign = "left"; 
+		context.textAlign = "left";
 		context.fillStyle = "rgb(" + this.brushColor.r + "," + this.brushColor.g + "," + this.brushColor.b + ")";
 		context.fillText(text, x-2, y+19);
 		this.plugin.record_undo_entry.call(this);
