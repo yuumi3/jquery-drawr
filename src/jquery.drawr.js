@@ -32,8 +32,8 @@
 				var translate_y = typeof scrollEl!=="undefined" ? scrollEl.scrollY : 0;
 
 				var bounding_box = {
-					left: relativeTo.offsetLeft - translate_x + borderLeft,
-					top: relativeTo.offsetTop - translate_y + borderTop
+					left: relativeTo.getBoundingClientRect().left - translate_x + borderLeft,
+					top: relativeTo.getBoundingClientRect().top - translate_y + borderTop
 				};
 			} else {
 				var bounding_box = {
@@ -314,9 +314,7 @@
 				"z-index": 5,
 				"position":"absolute",
 				"width" : parent_width,
-				"height" : parent_height,
-				"top" : ($(this).parent().offset().top + borderTop) + "px",
-				"left" : ($(this).parent().offset().left + borderLeft) + "px"
+				"height" : parent_height
 			});
 			this.$memoryCanvas[0].width=parent_width;
 			this.$memoryCanvas[0].height=parent_height;

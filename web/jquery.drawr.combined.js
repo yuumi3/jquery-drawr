@@ -6,7 +6,7 @@
 */
 
 (function( $ ) {
- 
+
     $.fn.drawr = function( action, param ) {
     	var plugin = this;
     	var tspImg="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4wUIDDYyGYFdggAAAC5JREFUOMtjfPXqFQNuICoqikeWiYECMKp5ZGhm/P//Px7p169fjwbYqGZKNAMA5EEI4kUyPZcAAAAASUVORK5CYII=";
@@ -37,8 +37,8 @@
 			} else {
 				var bounding_box = {
 					left: 0,
-					top: 0 
-				};			
+					top: 0
+				};
 			}
 			if(event.type=="touchmove" || event.type=="touchstart"){
 				var pressure = typeof event.originalEvent.touches[0].force!=="undefined" ? event.originalEvent.touches[0].force : 1;
@@ -61,7 +61,7 @@
 				grad.addColorStop(1, 'hsl('+hue+', 100%, '+(50-row/2)+'%)');
 				ctx.fillStyle=grad;
 				ctx.fillRect(0, row, 100, 1);
-			}	
+			}
 	    };
 		plugin.is_dragging = false;
 
@@ -175,7 +175,7 @@
 					if(typeof result!=="undefined"){
 						plugin.record_undo_entry.call(self);
 		      		}
-	  
+
 				}
 				$(self).data("is_drawing",false).data("lastx",null).data("lasty",null);
 				$(".drawr-toolbox").data("dragging", false);
@@ -275,7 +275,7 @@
 				this.width=width;
 				this.height=height;
 			}
-			
+
 			if(reset==true){
 				this.zoomFactor = 1;
 				if(typeof this.$zoomToolbox!=="undefined") this.$zoomToolbox.find("input").val(100).trigger("input");
@@ -289,7 +289,7 @@
     		});
 
 			this.pen_pressure = false;//switches mode once it detects.
-			
+
 			var context = this.getContext("2d", { alpha: this.settings.enable_tranparency });
 
     		if(this.settings.clear_on_init==true){
@@ -313,9 +313,7 @@
 				"z-index": 5,
 				"position":"absolute",
 				"width" : parent_width,
-				"height" : parent_height,
-				"top" : ($(this).parent().offset().top + borderTop) + "px",
-				"left" : ($(this).parent().offset().left + borderLeft) + "px"
+				"height" : parent_height
 			});
 			this.$memoryCanvas[0].width=parent_width;
 			this.$memoryCanvas[0].height=parent_height;
@@ -328,7 +326,7 @@
         	if(!$(this).hasClass("active-drawr")) return;//end drawing loop
         	var context = this.$memoryCanvas[0].getContext("2d");
         	context.clearRect(0,0,this.$memoryCanvas[0].width,this.$memoryCanvas[0].height);
- 
+
         	if(typeof this.effectCallback!=="undefined" && this.effectCallback!==null){
         		this.effectCallback.call(this,context,this.active_brush,this.scrollX,this.scrollY,this.zoomFactor);
         	}
@@ -343,22 +341,22 @@
 
 			//draw lines outlining canvas size
 
-			context.beginPath(); 
+			context.beginPath();
 			context.moveTo(0,-1-this.scrollY);
 			context.lineTo(this.width,-1-this.scrollY);
 			context.stroke();
 
-    		context.beginPath(); 
+    		context.beginPath();
 			context.moveTo(0,(this.height*this.zoomFactor)-this.scrollY);
 			context.lineTo(this.width,(this.height*this.zoomFactor)-this.scrollY);
 			context.stroke();
 
-			context.beginPath(); 
+			context.beginPath();
 			context.moveTo(-1-this.scrollX,0);
 			context.lineTo(-1-this.scrollX,this.height);
 			context.stroke();
 
-    		context.beginPath(); 
+    		context.beginPath();
 			context.moveTo((this.width*this.zoomFactor)-this.scrollX,0);
 			context.lineTo((this.width*this.zoomFactor)-this.scrollX,this.height);
 			context.stroke();
@@ -371,20 +369,20 @@
 				this.scrollTimer-=5;
 				context.lineWidth = 4;
 				context.lineCap = 'square';
-				context.beginPath(); 
+				context.beginPath();
 
 				//horizontal
 				var max_bar_width = container_width;
 				var visible_scroll_x = container_width;
 				if(this.scrollX<0) visible_scroll_x += this.scrollX;
 				if(this.scrollX> (this.width*this.zoomFactor)-container_width) visible_scroll_x -= this.scrollX-((this.width*this.zoomFactor)-container_width);
-				if(visible_scroll_x<0) visible_scroll_x = 0;	
+				if(visible_scroll_x<0) visible_scroll_x = 0;
 				var percentage = 100/this.width * visible_scroll_x;
 				var scroll_bar_width= max_bar_width / 100 * percentage;
 				scroll_bar_width/=this.zoomFactor;
 				if(scroll_bar_width<1) scroll_bar_width = 1;
 
-				var position_percentage = (100/((this.width*this.zoomFactor)-container_width))*this.scrollX;	
+				var position_percentage = (100/((this.width*this.zoomFactor)-container_width))*this.scrollX;
 				var posx=(((max_bar_width-scroll_bar_width)/100)*position_percentage);
 				if(posx<0) posx=0;
 				if(posx>container_width-scroll_bar_width) posx = container_width-scroll_bar_width;
@@ -398,13 +396,13 @@
 				var visible_scroll_y = container_height;
 				if(this.scrollY<0) visible_scroll_y += this.scrollY;
 				if(this.scrollY> (this.height*this.zoomFactor)-container_height) visible_scroll_y -= this.scrollY-((this.height*this.zoomFactor)-container_height);
-				if(visible_scroll_y<0) visible_scroll_y = 0;	
+				if(visible_scroll_y<0) visible_scroll_y = 0;
 				var percentage = 100/(this.height*this.zoomFactor) * visible_scroll_y;
 				var scroll_bar_height= max_bar_height / 100 * percentage;
 			//	scroll_bar_height/=this.zoomFactor;
 				if(scroll_bar_height<1) scroll_bar_height = 1;
 
-				var position_percentage = (100/((this.width*this.zoomFactor)-container_height))*this.scrollY;	
+				var position_percentage = (100/((this.width*this.zoomFactor)-container_height))*this.scrollY;
 				var posy=(((max_bar_height-scroll_bar_height)/100)*position_percentage);
 				if(posy<0) posy=0;
 				if(posy>container_height-scroll_bar_height) posy = container_height-scroll_bar_height;
@@ -467,7 +465,7 @@
 	        var currentCanvas = this.first()[0];
 	        var mime = typeof param=="undefined" ? "image/png" : param;
 	        return currentCanvas.toDataURL(mime);
-	    } 
+	    }
 
 	    if( action == "button" ){
 	    	var collection = $();
@@ -482,7 +480,7 @@
         //Initialize canvas or calling of methods
 		this.each(function() {
 
-			var currentCanvas = this;	
+			var currentCanvas = this;
 			if ( action === "start") {
 				if(!$(currentCanvas).hasClass("active-drawr")) {
                     console.error("The element you are running this command on is not a drawr canvas.");
@@ -491,7 +489,7 @@
 	            $(".drawr-toolbox").hide();
 	            $(".drawr-toolbox-brush").show();
 	            $(".drawr-toolbox-palette").show();
-				currentCanvas.$brushToolbox.find("button:first").mousedown();	            
+				currentCanvas.$brushToolbox.find("button:first").mousedown();
 	        } else if ( action === "stop" ) {
 	        	if(!$(currentCanvas).hasClass("active-drawr")) {
                     console.error("The element you are running this command on is not a drawr canvas.");
@@ -579,7 +577,7 @@
 	    		$(currentCanvas).removeClass("active-drawr");
 				$(currentCanvas).parent().removeClass("drawr-container");
 	        } else if ( typeof action == "object" || typeof action =="undefined" ){//not an action, but an init call
-	        	
+
 				if($(currentCanvas).hasClass("active-drawr")) return false;//prevent double init
 				currentCanvas.className = currentCanvas.className + " active-drawr";
 				$(currentCanvas).parent().addClass("drawr-container");
@@ -605,14 +603,14 @@
 	        	//set up canvas
         		plugin.initialize_canvas.call(currentCanvas,defaultSettings.canvas_width,defaultSettings.canvas_height,true);
         		currentCanvas.undoStack = [{data:currentCanvas.toDataURL("image/png"),current:true}];
-				var context = currentCanvas.getContext("2d", { alpha: defaultSettings.enable_tranparency });			
+				var context = currentCanvas.getContext("2d", { alpha: defaultSettings.enable_tranparency });
 				currentCanvas.brushColor = { r: 0, g: 0, b: 0 };
 				window.requestAnimationFrame(plugin.draw_animations.bind(currentCanvas));
 
 				//brush dialog
         		currentCanvas.$brushToolbox = plugin.create_toolbox.call(currentCanvas,"brush",{ left: $(currentCanvas).parent().offset().left, top: $(currentCanvas).parent().offset().top },"Brushes",80);
 
-        		$.fn.drawr.availableBrushes.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0);} ); 
+        		$.fn.drawr.availableBrushes.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0);} );
 
 				$.each($.fn.drawr.availableBrushes,function(i,brush){
 	    			plugin.create_button.call(currentCanvas,currentCanvas.$brushToolbox[0],"brush",brush);
@@ -623,7 +621,7 @@
 	    		});
 	    		plugin.create_button.call(currentCanvas,currentCanvas.$brushToolbox[0],"toggle",{"icon":"mdi mdi-magnify mdi-24px"}).on("touchstart.drawr mousedown.drawr",function(){
 	    			currentCanvas.$zoomToolbox.toggle();
-	    		});	    		
+	    		});
 	    		currentCanvas.$undoButton=plugin.create_button.call(currentCanvas,currentCanvas.$brushToolbox[0],"action",{"icon":"mdi mdi-undo-variant mdi-24px"}).on("touchstart.drawr mousedown.drawr",function(){
 				    if(currentCanvas.undoStack.length>0){
 						if(currentCanvas.undoStack[currentCanvas.undoStack.length-1].current==true){
@@ -703,7 +701,7 @@
 			}
 		});
 		return this;
- 
+
     };
 
     /* Register a new brush */
@@ -713,7 +711,7 @@
     };
 
     //go to center? do dis: plugin.apply_scroll.call(currentCanvas,((currentCanvas.width*currentCanvas.zoomFactor)-$(currentCanvas).parent().width())/2,((currentCanvas.height*currentCanvas.zoomFactor)-$(currentCanvas).parent().height())/2,true);
- 
+
 }( jQuery ));
 
 /*!
